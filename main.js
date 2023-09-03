@@ -54,3 +54,28 @@ for (let i = 0; i < 132; i++) {
   pointsParent.appendChild(div);
   div.textContent = "";
 }
+
+let langs = document.querySelectorAll(".lan");
+
+langs.forEach((e) => {
+  e.addEventListener("click", () => {
+    document.documentElement.lang = e.getAttribute("atr");
+    window.localStorage.setItem("language", document.documentElement.lang);
+  });
+});
+
+setInterval(() => {
+  let lang = window.localStorage.getItem("language");
+  fetch(`./${lang}.json`)
+    .then((res) => res.json())
+    .then((response) => {
+      console.log(lang);
+      console.log(response[0]);
+      let divs = document.querySelectorAll(".translate");
+      for (let i = 0; i < divs.length; i++)
+        if (response[0].hasOwnProperty(divs[i].getAttribute("arabic"))) {
+          divs[i].textContent = response[0][divs[i].getAttribute("arabic")];
+        }
+    })
+    .catch((err) => console.log(err));
+});
